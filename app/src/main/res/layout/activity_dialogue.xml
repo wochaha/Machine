@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background"
     tools:context=".activity.DialogueActivity">
 
 
@@ -18,12 +19,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/input"
-            android:inputType="text"
+        <LinearLayout
+            android:background="#ffff"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
+
+            <EditText
+                android:background="@null"
+                android:id="@+id/input"
+                android:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
 
         <Button
             android:text="@string/send"

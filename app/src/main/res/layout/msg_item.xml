@@ -5,6 +5,8 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:background="@drawable/ic_dialog_left"
+        android:layout_margin="8dp"
         android:id="@+id/left_layout"
         android:layout_gravity="left"
         android:layout_width="wrap_content"
@@ -13,9 +15,8 @@
 
         <TextView
             android:textSize="18sp"
-            android:background="@color/colorAccent"
             android:textColor="#000"
-            android:layout_margin="5dp"
+            android:layout_margin="6dp"
             android:layout_gravity="center"
             android:id="@+id/left_msg"
             android:layout_width="wrap_content"
@@ -24,6 +25,8 @@
     </LinearLayout>
 
     <LinearLayout
+        android:background="@drawable/ic_dialog_right"
+        android:layout_margin="8dp"
         android:id="@+id/right_layout"
         android:layout_gravity="right"
         android:layout_width="wrap_content"
@@ -32,9 +35,8 @@
 
         <TextView
             android:textSize="18sp"
-            android:background="@color/colorPrimary"
             android:textColor="#000"
-            android:layout_margin="5dp"
+            android:layout_margin="6dp"
             android:layout_gravity="center"
             android:id="@+id/right_msg"
             android:layout_width="wrap_content"
