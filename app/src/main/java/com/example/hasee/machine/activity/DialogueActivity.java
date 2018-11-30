@@ -1,19 +1,30 @@
 package com.example.hasee.machine.activity;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.hasee.machine.R;
@@ -25,6 +36,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -46,24 +58,67 @@ public class DialogueActivity extends AppCompatActivity implements View.OnClickL
     private ArrayList<Message> messages = new ArrayList<>();
     private RecyclerView recyclerView;
     private MyAdapter adapter;
+    private LinearLayout mLayout;
+
+    private int index;
+    private SharedPreferences sharedPreferences;
+
+    public static List<Drawable> mDrawableList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialogue);
+        changeActionBar();
 
         initWidget();
+        setBackground();
         send.setOnClickListener(this);
+    }
+
+    private void changeActionBar(){
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("小邮");
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setBackground();
+    }
+
+    private void setBackground(){
+        sharedPreferences = getSharedPreferences("setting",Context.MODE_PRIVATE);
+        if (sharedPreferences != null) {
+            index = sharedPreferences.getInt("position",0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                mLayout.setBackground(mDrawableList.get(index));
+            }
+        }
     }
 
     private void initWidget(){
         input = findViewById(R.id.input);
         send = findViewById(R.id.send);
         recyclerView = findViewById(R.id.recycler_view);
+        mLayout = findViewById(R.id.back_layout);
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
         adapter = new MyAdapter(messages);
         recyclerView.setAdapter(adapter);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mDrawableList.add(getDrawable(R.drawable.background));
+            mDrawableList.add(getDrawable(R.drawable.background1));
+            mDrawableList.add(getDrawable(R.drawable.background2));
+            mDrawableList.add(getDrawable(R.drawable.background3));
+            mDrawableList.add(getDrawable(R.drawable.background4));
+            mDrawableList.add(getDrawable(R.drawable.background5));
+            mDrawableList.add(getDrawable(R.drawable.background6));
+        }
     }
 
     @Override
@@ -178,5 +233,24 @@ public class DialogueActivity extends AppCompatActivity implements View.OnClickL
     private JsonBean parseJsonWithResponse(String body) {
         Gson gson = new Gson();
         return gson.fromJson(body,JsonBean.class);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.setting:
+                Intent intent = new Intent(this,SettingActivity.class);
+                startActivity(intent);
+                return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+        }
     }
 }
